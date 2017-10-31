@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>eu.clarussecure</groupId>
+    <artifactId>clarus-tools</artifactId>
+    <version>1.0.2</version>
+    <packaging>pom</packaging>
+    <name>CLARUS Management Tools</name>
+    <modules>
+        <module>../ARM</module>
+        <module>../security-policy-model</module>
+        <module>../security-administration</module>
+        <module>../security-policy-mgmt</module>
+        <module>../sample-userlibrary</module>
+    </modules>
+  <organization>
+    <name>The CLARUS Consortium</name>
+    <url>http://www.clarussecure.eu/</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>TO BE DEFINED</name>
+      <url>TO BE DEFINED</url>
+      <distribution>TO BE DEFINED</distribution>
+    </license>
+  </licenses>
+  <properties>
+    <clarus.version>1.0.3-SNAPSHOT</clarus.version>
+    <jdk.version>1.8</jdk.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <team.name>CLARUS Team</team.name>
+    <skip.surefire.tests>true</skip.surefire.tests>
+    <skip.failsafe.tests>true</skip.failsafe.tests>
+    <doc.generation.skip>true</doc.generation.skip>
+    <install.dir>${basedir}/install</install.dir>
+    <plugin.compiler.version>3.5.1</plugin.compiler.version>
+    <plugin.surefire.version>2.12.4</plugin.surefire.version>
+    <plugin.failsafe.version>2.19.1</plugin.failsafe.version>
+    <plugin.dependency.version>2.10</plugin.dependency.version>
+    <plugin.resources.version>3.0.1</plugin.resources.version>
+    <plugin.clean.version>3.0.0</plugin.clean.version>
+    <plugin.jar.version>3.0.2</plugin.jar.version>
+    <plugin.license.version>1.12</plugin.license.version>
+    <plugin.formatter.version>[2.0.0,)</plugin.formatter.version>
+  </properties>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <inherited>false</inherited>
+        <executions>
+          <execution>
+            <id>copy-script</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${install.dir}</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${basedir}/src/main/scripts</directory>
+                  <includes>
+                    <include>clarus-spm</include>
+                    <include>clarus-adm</include>
+                    <include>clarus-arm</include>
+                  </includes>
+                  <filtering>false</filtering>
+                </resource>
+                <resource>
+                    <directory>${basedir}/src/main/conf</directory>
+                    <includes>
+                        <include>clarus-mgmt-tools.conf</include>
+                        <include>clarus-tools.conf</include>
+                    </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <inherited>false</inherited>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${install.dir}</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>net.revelc.code.formatter</groupId>
+        <artifactId>formatter-maven-plugin</artifactId>
+        <version>2.0.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>format</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <configFile>${project.basedir}/eclipse-formatter-config.xml</configFile>
+        </configuration>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${plugin.compiler.version}</version>
+          <configuration>
+            <source>${jdk.version}</source>
+            <target>${jdk.version}</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${plugin.surefire.version}</version>
+          <configuration>
+            <skipTests>${skip.surefire.tests}</skipTests>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>${plugin.failsafe.version}</version>
+          <executions>
+            <execution>
+              <id>integration-test</id>
+              <goals>
+                <goal>integration-test</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>verify</id>
+              <goals>
+                <goal>verify</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <forkCount>1</forkCount>
+            <reuseForks>false</reuseForks>
+            <argLine>-Djava.ext.dirs="${java.ext.dirs}";${project.parent.relativePath}/install/ext-libs</argLine>
+            <skipITs>${skip.failsafe.tests}</skipITs>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>${plugin.dependency.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${plugin.resources.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>${plugin.clean.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${plugin.jar.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>${plugin.license.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>net.revelc.code.formatter</groupId>
+          <artifactId>formatter-maven-plugin</artifactId>
+          <version>${plugin.formatter.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+  <profiles>
+      <profile>
+          <id>deb-packaging</id>
+          <activation>
+              <activeByDefault>false</activeByDefault>
+          </activation>
+          <properties>
+              <deb-name>${project.artifactId}_${project.version}.deb</deb-name>
+              <deb-section>base</deb-section>
+              <deb-priority>standard</deb-priority>
+              <deb-architecture>all</deb-architecture>
+              <deb-maintainer>The CLARUS Consortium &lt;contact@clarussecure.eu&gt;</deb-maintainer>
+              <deb-description>The CLARUS Tools for proxy configuration.</deb-description>
+              <deb-dependencies>openjdk-8-jdk (&gt;= 8u77-b03-3ubuntu3), mongodb (&gt;= 1:2.6.10-0ubuntu1)</deb-dependencies>
+              <deb-basefolder>${install.dir}/${project.artifactId}_${project.version}</deb-basefolder>
+              <deb-control-file>${deb-basefolder}/DEBIAN/control</deb-control-file>
+          </properties>
+          <build>
+              <plugins>
+                  <plugin>
+                      <groupId>org.apache.maven.plugins</groupId>
+                      <artifactId>maven-antrun-plugin</artifactId>
+                      <version>1.4</version>
+                      <inherited>false</inherited>
+                      <executions>
+                          <execution>
+                              <phase>install</phase>
+                              <goals>
+                                  <goal>run</goal>
+                              </goals>
+                              <configuration>
+                                  <tasks>
+                                      <!-- IMPORTANT - Correctly define the CLARUS_TOOLS_VERSION in the configuration file -->
+                                      <echo file="${install.dir}/clarus-tools.conf" append="true">CLARUS_TOOLS_VERSION=${project.version}${line.separator}</echo>
+                                      <!-- Create the debian control file -->
+                                      <echo file="${deb-control-file}" append="true">Package: ${project.artifactId}${line.separator}</echo>
+                                      <echo file="${deb-control-file}" append="true">Version: ${project.version}${line.separator}</echo>
+                                      <echo file="${deb-control-file}" append="true">Section: ${deb-section}${line.separator}</echo>
+                                      <echo file="${deb-control-file}" append="true">Priority: ${deb-priority}${line.separator}</echo>
+                                      <echo file="${deb-control-file}" append="true">Architecture: ${deb-architecture}${line.separator}</echo>
+                                      <echo file="${deb-control-file}" append="true">Maintainer: ${deb-maintainer}${line.separator}</echo>
+                                      <echo file="${deb-control-file}" append="true">Description: ${deb-description}${line.separator}</echo>
+                                      <echo file="${deb-control-file}" append="true">Depends: ${deb-dependencies}${line.separator}</echo>
+                                      <!-- Copy the libs to the debian internal structure -->
+                                      <copy todir="${deb-basefolder}/opt/clarus/tools/libs">
+                                          <fileset dir="${install.dir}/libs" />
+                                      </copy>
+                                      <!-- Copy the configuration files to debian internal structure -->
+                                      <copy file="${install.dir}/clarus-mgmt-tools.conf" tofile="${deb-basefolder}/etc/clarus/clarus-mgmt-tools.conf"></copy>
+                                      <copy file="${install.dir}/clarus-tools.conf" tofile="${deb-basefolder}/etc/clarus/clarus-tools.conf"></copy>
+                                      <!-- Copy the executable files -->
+                                      <copy file="${install.dir}/clarus-spm" tofile="${deb-basefolder}/usr/bin/clarus-spm"></copy>
+                                      <copy file="${install.dir}/clarus-arm" tofile="${deb-basefolder}/usr/bin/clarus-arm"></copy>
+                                      <copy file="${install.dir}/clarus-adm" tofile="${deb-basefolder}/usr/bin/clarus-adm"></copy>
+                                      <!-- Fix the permissions and the execution -->
+                                      <chmod dir="${deb-basefolder}/usr/bin" perm="755" includes="**/*"></chmod>
+                                      <chmod file="${deb-basefolder}/etc/clarus/clarus-mgmt-tools.conf" perm="764"></chmod>
+                                      <chmod file="${deb-basefolder}/etc/clarus/clarus-tools.conf" perm="764"></chmod>
+                                      <!-- Invoke dpkg -->
+                                      <exec executable="dpkg-deb">
+                                          <arg value="-b" />
+                                          <arg value="${deb-basefolder}" />
+                                      </exec>
+                                      <!-- Delete the temp folder -->
+                                      <delete dir="${deb-basefolder}" />
+                                  </tasks>
+                              </configuration>
+                          </execution>
+                      </executions>
+                  </plugin>
+              </plugins>
+          </build>
+      </profile>
+  </profiles>
+</project>

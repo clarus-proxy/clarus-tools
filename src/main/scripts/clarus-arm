@@ -1,0 +1,6 @@
+#!/bin/bash
+
+source /etc/clarus/clarus-tools.conf
+
+$JAVA_COMMAND -Djava.ext.dirs=$CLARUS_TOOLS_LIBRARIES_PATH:$JAVA_HOME/lib/ext -jar $CLARUS_TOOLS_BASE_PATH/CLARUS-ARM-"$CLARUS_TOOLS_VERSION".jar $@
+
