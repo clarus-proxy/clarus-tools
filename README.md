@@ -91,7 +91,8 @@ under the *install* folder
 │   └── libs
 ├── pom.xml
 └── src
-    └── main```
+    └── main
+```
 
 ## Packaging the tools
 
@@ -120,4 +121,5 @@ The last command will use the previous installation to create the Debian package
 │   └── libs
 ├── pom.xml
 └── src
-    └── main```
+    └── main
+```
