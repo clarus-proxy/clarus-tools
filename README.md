@@ -77,7 +77,8 @@ maven in the CLARUS Tools folder:
 This command will compile the code and provide a local installation of the tools
 under the *install* folder
 
-```$ tree -L 2
+```
+$ tree -L 2
 .
 ├── README.md
 ├── eclipse-formatter-config.xml
@@ -107,7 +108,8 @@ with the *deb-packaging* profile:
 The last command will use the previous installation to create the Debian package under the
 *install* folder:
 
-```$ tree -L 2
+```
+$ tree -L 2
 .
 ├── README.md
 ├── eclipse-formatter-config.xml
